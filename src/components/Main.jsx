@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
 import IngredientsList from './IngredientsList';
 import ClaudeRecipe from './ClaudeRecipe';
-import { getRecipeFromClaude } from '../ai';
 
 export default function Main() {
     const [ingredients, setIngredients] = useState(["Chicken breasts", "Olive oil", "Garlic"]);
-    const [recipe, setRecipe] = useState("");
+    const [showRecipe, setShowRecipe] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
 
     function handleSubmit(event) {
@@ -21,14 +20,9 @@ export default function Main() {
 
     async function getRecipe() {
         setIsLoading(true);
-        try {
-            const recipeMarkdown = await getRecipeFromClaude(ingredients);
-            setRecipe(recipeMarkdown);
-        } catch (err) {
-            console.error(err);
-        } finally {
-            setIsLoading(false);
-        }
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        setShowRecipe(true);
+        setIsLoading(false);
     }
 
     return (
@@ -51,7 +45,7 @@ export default function Main() {
                 isLoading={isLoading}
             />
 
-            {recipe && <ClaudeRecipe recipe={recipe} />}
+            {showRecipe && <ClaudeRecipe ingredients={ingredients} />}
         </main>
     );
 }
